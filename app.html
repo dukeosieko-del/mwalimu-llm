@@ -180,6 +180,24 @@
     </div>
 
     <script>
+        // Load settings from localStorage
+        const loadSettings = () => {
+            const promptRules = localStorage.getItem('mwPromptRules');
+            if (promptRules) {
+                document.querySelector('#prompt-modal textarea').value = promptRules;
+            }
+
+            const personalize = JSON.parse(localStorage.getItem('mwPersonalize') || '{}');
+            if (personalize.language) document.querySelector('#personalize-modal select:nth-child(1)').value = personalize.language;
+            if (personalize.level) document.querySelector('#personalize-modal select:nth-child(2)').value = personalize.level;
+            if (personalize.style) document.querySelector('#personalize-modal select:nth-child(3)').value = personalize.style;
+
+            const team = JSON.parse(localStorage.getItem('mwTeam') || '{}');
+            if (team.name) document.querySelector('#team-modal input[type="text"]').value = team.name;
+            if (team.members) document.querySelector('#team-modal input[type="email"]').value = team.members;
+            if (team.resources) document.querySelector('#team-modal textarea').value = team.resources;
+        };
+
         // Modal functionality
         const modals = ['prompt-modal', 'personalize-modal', 'team-modal'];
         const modalBtns = ['.prompt-rules-btn', '.personalize-btn', '.team-btn'];
@@ -187,6 +205,7 @@
 
         modalBtns.forEach((btn, index) => {
             document.querySelector(btn).addEventListener('click', () => {
+                loadSettings();
                 document.getElementById(modals[index]).classList.remove('hidden');
             });
         });
@@ -203,6 +222,34 @@
         const chatInput = document.querySelector('.chat-input');
         const sendBtn = document.querySelector('.send-btn');
         const chatMessages = document.querySelector('.chat-messages .space-y-4');
+        const modelSelect = document.querySelector('.model-select');
+
+        const responseSets = {
+            grok: [
+                "That's a great question! As a helpful AI built by xAI, I'm excited to assist with your educational needs.",
+                "Based on the Kenyan curriculum, here's what I recommend: Let's make learning fun and effective!",
+                "I can generate that document for you. Would you like me to include some creative elements?",
+                "Excellent choice! Here's a tailored response with a touch of Grok's personality."
+            ],
+            chatgpt: [
+                "I'm here to help! Based on the Kenyan education system, I can provide comprehensive assistance.",
+                "Let me generate that educational document for you with detailed, structured content.",
+                "Would you like me to include specific curriculum references or additional resources?",
+                "Here's a well-structured response to support your teaching needs."
+            ],
+            deepseek: [
+                "Analyzing your request... DeepSeek AI here to provide advanced educational solutions.",
+                "Based on deep learning analysis of Kenyan educational standards, here's my recommendation:",
+                "I can generate highly detailed documents with advanced formatting and insights.",
+                "Utilizing advanced AI capabilities for optimal educational content creation."
+            ],
+            claude: [
+                "Hello! I'm Claude, an AI assistant focused on being helpful and truthful.",
+                "For your Kenyan education needs, I can create comprehensive, curriculum-aligned materials.",
+                "Would you like me to structure this response with clear sections and examples?",
+                "Here's a thoughtful, well-reasoned response to support your educational goals."
+            ]
+        };
 
         function addMessage(content, isUser = false) {
             const messageDiv = document.createElement('div');
@@ -222,14 +269,10 @@
                 addMessage(message, true);
                 chatInput.value = '';
 
-                // Simulate AI response
+                // Simulate AI response based on selected model
                 setTimeout(() => {
-                    const responses = [
-                        "That's a great question! Let me help you with that.",
-                        "Based on the Kenyan curriculum, here's what I recommend:",
-                        "I can generate that document for you. Would you like me to include specific details?",
-                        "Excellent choice! Here's a tailored response for your needs."
-                    ];
+                    const selectedModel = modelSelect.value;
+                    const responses = responseSets[selectedModel] || responseSets.grok;
                     const randomResponse = responses[Math.floor(Math.random() * responses.length)];
                     addMessage(randomResponse);
                 }, 1000);
@@ -261,34 +304,73 @@
 
         // Voice input simulation
         document.querySelector('.voice-btn').addEventListener('click', () => {
-            alert('Voice input feature coming soon! (Demo)');
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                alert('Voice input activated! (Demo - would start speech recognition)');
+            } else {
+                alert('Voice input not supported in this browser. (Demo)');
+            }
         });
 
         // Export chat
         document.querySelector('.export-btn').addEventListener('click', () => {
-            alert('Chat exported! (Demo - would download as text file)');
+            const messages = Array.from(chatMessages.children).map(msg => {
+                const isUser = msg.classList.contains('justify-end');
+                const content = msg.querySelector('p').textContent;
+                return `${isUser ? 'You' : 'MWALIMU AI'}: ${content}`;
+            }).join('\n\n');
+
+            const blob = new Blob([messages], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mw-chat-export.txt';
+            a.click();
+            URL.revokeObjectURL(url);
         });
 
         // Theme toggle
         document.querySelector('.theme-btn').addEventListener('click', () => {
             document.body.classList.toggle('dark');
+            localStorage.setItem('mwTheme', document.body.classList.contains('dark') ? 'dark' : 'light');
         });
 
-        // Save buttons (demo alerts)
+        // Load theme
+        if (localStorage.getItem('mwTheme') === 'dark') {
+            document.body.classList.add('dark');
+        }
+
+        // Save buttons
         document.querySelector('.save-prompt-btn').addEventListener('click', () => {
+            const promptText = document.querySelector('#prompt-modal textarea').value;
+            localStorage.setItem('mwPromptRules', promptText);
             alert('Prompt rules saved!');
             document.getElementById('prompt-modal').classList.add('hidden');
         });
 
         document.querySelector('.save-personalize-btn').addEventListener('click', () => {
+            const language = document.querySelector('#personalize-modal select:nth-child(1)').value;
+            const level = document.querySelector('#personalize-modal select:nth-child(2)').value;
+            const style = document.querySelector('#personalize-modal select:nth-child(3)').value;
+
+            const personalize = { language, level, style };
+            localStorage.setItem('mwPersonalize', JSON.stringify(personalize));
             alert('Personalization settings saved!');
             document.getElementById('personalize-modal').classList.add('hidden');
         });
 
         document.querySelector('.save-team-btn').addEventListener('click', () => {
+            const name = document.querySelector('#team-modal input[type="text"]').value;
+            const members = document.querySelector('#team-modal input[type="email"]').value;
+            const resources = document.querySelector('#team-modal textarea').value;
+
+            const team = { name, members, resources };
+            localStorage.setItem('mwTeam', JSON.stringify(team));
             alert('Team setup saved!');
             document.getElementById('team-modal').classList.add('hidden');
         });
+
+        // Initialize
+        loadSettings();
     </script>
 </body>
 </html>
