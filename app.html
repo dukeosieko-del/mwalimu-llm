@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MWALIMU AI - Chat Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#10b981',
+                        accent: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-gray-100 h-screen flex">
+    <!-- Sidebar -->
+    <div class="w-64 bg-white shadow-lg flex flex-col">
+        <div class="p-4 border-b">
+            <button class="w-full bg-primary text-white py-2 rounded-lg font-medium new-chat-btn">New Chat</button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-4">
+            <h3 class="text-lg font-semibold mb-4">Chat History</h3>
+            <div class="space-y-2 chat-history">
+                <div class="p-2 bg-gray-100 rounded cursor-pointer hover:bg-gray-200 chat-item" data-id="1">Lesson Plan Discussion</div>
+                <div class="p-2 bg-gray-100 rounded cursor-pointer hover:bg-gray-200 chat-item" data-id="2">Exam Generation Ideas</div>
+                <div class="p-2 bg-gray-100 rounded cursor-pointer hover:bg-gray-200 chat-item" data-id="3">Scheme of Work Review</div>
+            </div>
+        </div>
+        <div class="p-4 border-t">
+            <button class="w-full text-left py-2 hover:bg-gray-100 rounded settings-btn">Settings</button>
+            <button class="w-full text-left py-2 hover:bg-gray-100 rounded personalize-btn">Personalize</button>
+            <button class="w-full text-left py-2 hover:bg-gray-100 rounded team-btn">Team Setup</button>
+        </div>
+    </div>
+
+    <!-- Main Chat Area -->
+    <div class="flex-1 flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-white shadow p-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <select class="border rounded px-3 py-1 model-select">
+                    <option value="grok">Grok (xAI)</option>
+                    <option value="chatgpt">ChatGPT (OpenAI)</option>
+                    <option value="deepseek">DeepSeek</option>
+                    <option value="claude">Claude (Anthropic)</option>
+                </select>
+                <button class="text-primary hover:underline prompt-rules-btn">Prompt Rules</button>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button class="p-2 hover:bg-gray-100 rounded voice-btn" title="Voice Input">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                    </svg>
+                </button>
+                <button class="p-2 hover:bg-gray-100 rounded export-btn" title="Export Chat">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </button>
+                <button class="p-2 hover:bg-gray-100 rounded theme-btn" title="Toggle Theme">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="flex-1 overflow-y-auto p-4 chat-messages">
+            <div class="max-w-4xl mx-auto space-y-4">
+                <div class="flex justify-start">
+                    <div class="bg-white p-3 rounded-lg shadow max-w-xs">
+                        <p class="text-gray-800">Hello! I'm MWALIMU AI. How can I help you with educational documents today?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="bg-white border-t p-4">
+            <div class="max-w-4xl mx-auto flex space-x-2">
+                <input type="text" class="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary chat-input" placeholder="Type your message...">
+                <button class="bg-primary text-white px-6 py-2 rounded-lg font-medium send-btn">Send</button>
+            </div>
+            <div class="mt-2 text-sm text-gray-500 text-center">
+                Press Enter to send, Shift+Enter for new line
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Prompt Rules Modal -->
+    <div id="prompt-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
+                <h2 class="text-xl font-bold mb-4">Prompt Rules Setup</h2>
+                <textarea class="w-full h-32 border rounded p-2 mb-4" placeholder="Enter system prompt or rules for the AI...">You are MWALIMU AI, an expert in Kenyan education. Always provide accurate, curriculum-aligned content for tutors and stakeholders.</textarea>
+                <div class="flex justify-end space-x-2">
+                    <button class="px-4 py-2 border rounded close-modal">Cancel</button>
+                    <button class="px-4 py-2 bg-primary text-white rounded save-prompt-btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Personalize Modal -->
+    <div id="personalize-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
+                <h2 class="text-xl font-bold mb-4">Personalization Settings</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Preferred Language</label>
+                        <select class="w-full border rounded p-2">
+                            <option>English</option>
+                            <option>Swahili</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Education Level Focus</label>
+                        <select class="w-full border rounded p-2">
+                            <option>Primary</option>
+                            <option>Secondary</option>
+                            <option>Tertiary</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Response Style</label>
+                        <select class="w-full border rounded p-2">
+                            <option>Formal</option>
+                            <option>Casual</option>
+                            <option>Technical</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-2 mt-4">
+                    <button class="px-4 py-2 border rounded close-modal">Cancel</button>
+                    <button class="px-4 py-2 bg-primary text-white rounded save-personalize-btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Setup Modal -->
+    <div id="team-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
+                <h2 class="text-xl font-bold mb-4">Team Setup</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Team Name</label>
+                        <input type="text" class="w-full border rounded p-2" placeholder="Enter team name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Invite Members</label>
+                        <input type="email" class="w-full border rounded p-2" placeholder="Enter email addresses (comma-separated)">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Shared Resources</label>
+                        <textarea class="w-full h-20 border rounded p-2" placeholder="Describe shared resources or guidelines..."></textarea>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-2 mt-4">
+                    <button class="px-4 py-2 border rounded close-modal">Cancel</button>
+                    <button class="px-4 py-2 bg-primary text-white rounded save-team-btn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const modals = ['prompt-modal', 'personalize-modal', 'team-modal'];
+        const modalBtns = ['.prompt-rules-btn', '.personalize-btn', '.team-btn'];
+        const closeBtns = document.querySelectorAll('.close-modal');
+
+        modalBtns.forEach((btn, index) => {
+            document.querySelector(btn).addEventListener('click', () => {
+                document.getElementById(modals[index]).classList.remove('hidden');
+            });
+        });
+
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modals.forEach(modal => {
+                    document.getElementById(modal).classList.add('hidden');
+                });
+            });
+        });
+
+        // Chat functionality
+        const chatInput = document.querySelector('.chat-input');
+        const sendBtn = document.querySelector('.send-btn');
+        const chatMessages = document.querySelector('.chat-messages .space-y-4');
+
+        function addMessage(content, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex justify-${isUser ? 'end' : 'start'}`;
+            messageDiv.innerHTML = `
+                <div class="bg-${isUser ? 'primary text-white' : 'white'} p-3 rounded-lg shadow max-w-xs lg:max-w-md">
+                    <p>${content}</p>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                chatInput.value = '';
+
+                // Simulate AI response
+                setTimeout(() => {
+                    const responses = [
+                        "That's a great question! Let me help you with that.",
+                        "Based on the Kenyan curriculum, here's what I recommend:",
+                        "I can generate that document for you. Would you like me to include specific details?",
+                        "Excellent choice! Here's a tailored response for your needs."
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addMessage(randomResponse);
+                }, 1000);
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // New chat
+        document.querySelector('.new-chat-btn').addEventListener('click', () => {
+            chatMessages.innerHTML = '';
+            addMessage("Hello! I'm MWALIMU AI. How can I help you with educational documents today?");
+        });
+
+        // Chat history (simulate)
+        document.querySelectorAll('.chat-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const chatId = item.dataset.id;
+                chatMessages.innerHTML = '';
+                addMessage(`Loaded chat ${chatId}: Previous conversation about educational topics.`);
+            });
+        });
+
+        // Voice input simulation
+        document.querySelector('.voice-btn').addEventListener('click', () => {
+            alert('Voice input feature coming soon! (Demo)');
+        });
+
+        // Export chat
+        document.querySelector('.export-btn').addEventListener('click', () => {
+            alert('Chat exported! (Demo - would download as text file)');
+        });
+
+        // Theme toggle
+        document.querySelector('.theme-btn').addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+        });
+
+        // Save buttons (demo alerts)
+        document.querySelector('.save-prompt-btn').addEventListener('click', () => {
+            alert('Prompt rules saved!');
+            document.getElementById('prompt-modal').classList.add('hidden');
+        });
+
+        document.querySelector('.save-personalize-btn').addEventListener('click', () => {
+            alert('Personalization settings saved!');
+            document.getElementById('personalize-modal').classList.add('hidden');
+        });
+
+        document.querySelector('.save-team-btn').addEventListener('click', () => {
+            alert('Team setup saved!');
+            document.getElementById('team-modal').classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
