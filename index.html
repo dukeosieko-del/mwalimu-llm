@@ -64,7 +64,7 @@
             <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Transform your teaching workflow with MWALIMU AI - the ultimate AI-powered platform for generating professional educational documents tailored for the Kenyan education system.</p>
             <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
                     <a href="app.html" class="bg-white text-primary px-8 py-3 rounded-lg font-semibold text-lg hover:bg-gray-100 transition duration-300 inline-block text-center">Try MWALIMU AI</a>
-                    <button class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary transition duration-300">Watch Demo</button>
+                    <button class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary transition duration-300 demo-btn">Watch Demo</button>
                 </div>
         </div>
     </section>
@@ -216,6 +216,95 @@
         </div>
     </footer>
 
+    <!-- Demo Modal -->
+    <div id="demo-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-4xl w-full max-h-screen overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-3xl font-bold text-gray-900">MWALIMU AI Demo</h2>
+                        <button class="close-demo text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                    </div>
+
+                    <div class="space-y-8">
+                        <!-- Step 1: Landing -->
+                        <div class="demo-step">
+                            <h3 class="text-xl font-semibold mb-4 text-primary">1. Welcome to MWALIMU AI</h3>
+                            <div class="bg-gray-100 p-4 rounded-lg">
+                                <img src="https://via.placeholder.com/800x400/1e40af/white?text=MWALIMU+AI+Landing+Page" alt="Landing Page" class="w-full rounded mb-4">
+                                <p class="text-gray-700">Our professional landing page introduces MWALIMU AI as your AI-powered educational document generator, specifically designed for the Kenyan education system.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Features -->
+                        <div class="demo-step">
+                            <h3 class="text-xl font-semibold mb-4 text-primary">2. Powerful Features</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="bg-gray-100 p-4 rounded-lg">
+                                    <h4 class="font-semibold mb-2">Smart Exams</h4>
+                                    <p class="text-sm text-gray-600">Generate curriculum-aligned exams with automatic grading suggestions.</p>
+                                </div>
+                                <div class="bg-gray-100 p-4 rounded-lg">
+                                    <h4 class="font-semibold mb-2">Lesson Plans</h4>
+                                    <p class="text-sm text-gray-600">Create detailed lesson plans with objectives, materials, and procedures.</p>
+                                </div>
+                                <div class="bg-gray-100 p-4 rounded-lg">
+                                    <h4 class="font-semibold mb-2">Schemes of Work</h4>
+                                    <p class="text-sm text-gray-600">Develop comprehensive schemes of work for entire topics.</p>
+                                </div>
+                                <div class="bg-gray-100 p-4 rounded-lg">
+                                    <h4 class="font-semibold mb-2">Subject Notes</h4>
+                                    <p class="text-sm text-gray-600">Produce concise subject notes for student reference.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Chat Interface -->
+                        <div class="demo-step">
+                            <h3 class="text-xl font-semibold mb-4 text-primary">3. AI Chat Interface</h3>
+                            <div class="bg-gray-100 p-4 rounded-lg">
+                                <img src="https://via.placeholder.com/800x400/10b981/white?text=AI+Chat+Interface" alt="Chat Interface" class="w-full rounded mb-4">
+                                <p class="text-gray-700 mb-4">Experience our intuitive chat interface with multiple AI models:</p>
+                                <ul class="list-disc list-inside space-y-1 text-gray-600">
+                                    <li><strong>Grok (xAI):</strong> Helpful and fun responses</li>
+                                    <li><strong>ChatGPT (OpenAI):</strong> Structured, comprehensive answers</li>
+                                    <li><strong>DeepSeek:</strong> Advanced technical insights</li>
+                                    <li><strong>Claude (Anthropic):</strong> Thoughtful, well-reasoned responses</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Customization -->
+                        <div class="demo-step">
+                            <h3 class="text-xl font-semibold mb-4 text-primary">4. Personalization & Team Features</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-gray-100 p-4 rounded-lg text-center">
+                                    <h4 class="font-semibold mb-2">Prompt Rules</h4>
+                                    <p class="text-sm text-gray-600">Customize AI behavior with system prompts</p>
+                                </div>
+                                <div class="bg-gray-100 p-4 rounded-lg text-center">
+                                    <h4 class="font-semibold mb-2">Personalization</h4>
+                                    <p class="text-sm text-gray-600">Set language, education level, and response style</p>
+                                </div>
+                                <div class="bg-gray-100 p-4 rounded-lg text-center">
+                                    <h4 class="font-semibold mb-2">Team Setup</h4>
+                                    <p class="text-sm text-gray-600">Collaborate with colleagues and share resources</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 5: Try It -->
+                        <div class="demo-step text-center">
+                            <h3 class="text-xl font-semibold mb-4 text-primary">5. Ready to Try MWALIMU AI?</h3>
+                            <p class="text-gray-700 mb-6">Experience the power of AI-driven education tools. Click below to start using MWALIMU AI!</p>
+                            <a href="app.html" class="bg-primary text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition duration-300 inline-block">Try MWALIMU AI Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Sign In Modal -->
     <div id="signin-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="flex items-center justify-center min-h-screen">
@@ -272,9 +361,11 @@
         // Modal functionality
         const signinBtn = document.querySelector('.signin-btn');
         const signupBtn = document.querySelector('.signup-btn');
+        const demoBtn = document.querySelector('.demo-btn');
         const signinModal = document.getElementById('signin-modal');
         const signupModal = document.getElementById('signup-modal');
-        const closeBtns = document.querySelectorAll('.close-modal');
+        const demoModal = document.getElementById('demo-modal');
+        const closeBtns = document.querySelectorAll('.close-modal, .close-demo');
 
         signinBtn.addEventListener('click', () => {
             signinModal.classList.remove('hidden');
@@ -284,10 +375,15 @@
             signupModal.classList.remove('hidden');
         });
 
+        demoBtn.addEventListener('click', () => {
+            demoModal.classList.remove('hidden');
+        });
+
         closeBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 signinModal.classList.add('hidden');
                 signupModal.classList.add('hidden');
+                demoModal.classList.add('hidden');
             });
         });
 
